@@ -1,0 +1,83 @@
+{
+  "project_info": {
+    "project_number": "416227346652",
+    "firebase_url": "https://my-notes-app-207ce-default-rtdb.firebaseio.com",
+    "project_id": "my-notes-app-207ce",
+    "storage_bucket": "my-notes-app-207ce.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:416227346652:android:9d071884cde31d67798c19",
+        "android_client_info": {
+          "package_name": "com.example.note_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "416227346652-a53tduo78fg3taetd3r4e1nhnr21h1jb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDkdB7EmcUh4ZGTCb4MmoVqVZTu9XcJGeE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "416227346652-a53tduo78fg3taetd3r4e1nhnr21h1jb.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "416227346652-v2d3aacvim2l71skni4ieppu8un19sdf.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.noteApp"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:416227346652:android:dfff72d5848da80e798c19",
+        "android_client_info": {
+          "package_name": "com.example.notes"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "416227346652-a53tduo78fg3taetd3r4e1nhnr21h1jb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDkdB7EmcUh4ZGTCb4MmoVqVZTu9XcJGeE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "416227346652-a53tduo78fg3taetd3r4e1nhnr21h1jb.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "416227346652-v2d3aacvim2l71skni4ieppu8un19sdf.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.noteApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
