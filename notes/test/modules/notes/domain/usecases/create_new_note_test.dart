@@ -1,16 +1,17 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
-import 'package:notes/modules/notes/domain/entities/note.dart';
-import 'package:notes/modules/notes/domain/errors/errors.dart';
-import 'package:notes/modules/notes/domain/repositories/notes_repository.dart';
-import 'package:notes/modules/notes/domain/usecases/create_new_note.dart';
-import 'create_new_note_test.mocks.dart';
+import 'package:mockito/mockito.dart';
+import 'package:notes/app/modules/notes/domain/entities/note.dart';
+import 'package:notes/app/modules/notes/domain/errors/errors.dart';
+import 'package:notes/app/modules/notes/domain/repositories/notes_repository.dart';
+import 'package:notes/app/modules/notes/domain/usecases/create_new_note.dart';
 
-@GenerateMocks([NotesRepository])
+class NotesRepositoryMock extends Mock implements NotesRepository {}
+
 void main() {
 
-  final repository = MockRealtimeDatabase();
+  final repository = NotesRepositoryMock();
   final usecase = CreateNewNoteImpl(repository);
 
   test('Should return true if note is created', () async {

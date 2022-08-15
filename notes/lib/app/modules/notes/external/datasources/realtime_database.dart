@@ -1,86 +1,84 @@
-import 'package:dartz/dartz.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:notes/app/modules/notes/infra/errors/errors.dart';
+import 'package:flutter_modular/flutter_modular.dart';
+import 'package:notes/app/core/stores/auth_store.dart';
+import 'package:notes/app/modules/authentication/domain/usecases/get_logged_user.dart';
 
+import '../../../authentication/domain/entities/user.dart';
 import '../../infra/datasources/notes_database.dart';
 
 class RealtimeDatabase implements NotesDatasource {
-  // TIRAR UID PARA A PARTE DE AUTHENTICATION
-  String uid = 'x';
-  DatabaseReference ref = FirebaseDatabase.instance.ref('users/uid/notes');
+  var authStore = Modular.get<AuthStore>();
+
   RealtimeDatabase();
 
-  @override
-  Future<Either<FailureCreatingNewNoteInDatasource, bool>> createNote(
-      Map note) async {
-    try {
-      var newNoteId = ref.push().key;
-      ref = ref.child(newNoteId!);
+  Future<DatabaseReference> getRef() async {
+    User user = authStore.loggedUser;
+    String uid = user.uid;
+
+    DatabaseReference ref = FirebaseDatabase.instance.ref('users/$uid');
+    if (ref.key == null) {
       await ref.set({
-        "title": note['title'],
-        "text": note['body'],
-        "datetime_created": note['creation_date'],
-        "color": note['color']
+        uid: {'notes': {}}
       });
-      return const Right(true);
-    } catch (e) {
-      return Left(FailureCreatingNewNoteInDatasource(
-          'Failure trying to create note in datasource'));
     }
+    ref = FirebaseDatabase.instance.ref('users/$uid/notes');
+    return ref;
   }
 
   @override
-  Future<Either<FailureDeletingNoteInDatasource, bool>> deleteNote(
-      String id) async {
-    try {
-      await ref.child('id').remove();
-      return const Right(true);
-    } catch (e) {
-      return Left(FailureDeletingNoteInDatasource(
-          'Failure trying to delete note in datasource'));
-    }
+  Future<bool> createNote(Map note) async {
+    var ref = await getRef();
+
+    var newNoteId = ref.push().key;
+    ref = ref.child(newNoteId!);
+    await ref.set({
+      "title": note['title'],
+      "text": note['content'],
+      "datetime_created": note['datetimeCreated'],
+      "color": note['color']
+    });
+    return true;
   }
 
   @override
-  Future<Either<FailureGettingNoteInDatasource, Map>> getNote(String id) async {
-    final snapshot = await ref.child('id').get();
-    if (snapshot.exists) {
-      return Right(snapshot.value as Map);
-    } else {
-      return Left(FailureGettingNoteInDatasource(
-          'Failure trying to get note in datasource'));
-    }
+  Future<bool> deleteNote(String id) async {
+    var ref = await getRef();
+    await ref.child(id).remove();
+    return true;
   }
 
   @override
-  Future<Either<FailureGettingNotesQueryInDatasource, Query>>
-      getNotesQuery() async {
-    try {
-      final query = ref.orderByKey();
-      return Right(query);
-    } catch (e) {
-      return Left(FailureGettingNotesQueryInDatasource(
-          'Failure trying to get notes query'));
-    }
+  Future<Map> getNote(String id) async {
+    var ref = await getRef();
+    final snapshot = await ref.child(id).get();
+    return snapshot.value as Map;
   }
 
   @override
-  Future<Either<FailureUpdatingExistingNoteInDatasource, bool>> updateNote(
-      Map note) async {
-    try {
-      var newNoteId = ref.push().key;
-      ref = ref.child(newNoteId!);
-      await ref.update({
-        note['id']: {
-          "title": note['title'],
-          "text": note['body'],
-          "color": note['color']
-        }
+  Future<Query> getNotesQuery() async {
+    User user = authStore.loggedUser;
+    String uid = user.uid;
+
+    DatabaseReference ref = FirebaseDatabase.instance.ref('users/$uid');
+    if (ref.key == null) {
+      await ref.set({
+        uid: {'notes': {}}
       });
-      return const Right(true);
-    } catch (e) {
-      return Left(FailureUpdatingExistingNoteInDatasource(
-          'Failure trying to update note in datasource'));
     }
+    var query = FirebaseDatabase.instance.ref('users/$uid/notes').orderByKey();
+    return query;
+  }
+
+  @override
+  Future<bool> updateNote(Map note) async {
+    var ref = await getRef();
+    ref = ref.child(note['id']);
+    await ref.update({
+      "title": note['title'],
+      "text": note['content'],
+      "color": note['color'],
+      "datetime_created": note['datetimeCreated']
+    });
+    return true;
   }
 }

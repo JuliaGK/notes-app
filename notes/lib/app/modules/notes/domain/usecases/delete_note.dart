@@ -7,19 +7,22 @@ abstract class DeleteNote {
   Future<Either<FailureDeletingNote, bool>> call(String id);
 }
 
-class DeleteNoteImpl implements DeleteNote{
-
+class DeleteNoteImpl implements DeleteNote {
   final NotesRepository repository;
 
   DeleteNoteImpl(this.repository);
 
   @override
   Future<Either<FailureDeletingNote, bool>> call(String id) async {
-    try {
-      repository.deleteNote(id);
-      return const Right(true);
-    } catch (e) {
-      return Left(FailureDeletingNote('Failure editing existing note'));
+    if (id != '') {
+      var result = await repository.deleteNote(id);
+      if(result.isLeft()){
+        return result.leftMap((l) => l);
+      } else {
+        return result.map((r) => r);
+      }
+    } else {
+      return Left(FailureDeletingNote('Failure deleting note: id is empty'));
     }
-   }
+  }
 }

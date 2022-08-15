@@ -1,5 +1,7 @@
+import 'package:asuka/asuka.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:notes/app/themes/light_theme.dart';
 
 class AppWidget extends StatelessWidget {
   
@@ -9,11 +11,10 @@ class AppWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       title: 'Notes',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      theme: LightTheme().theme,
       routeInformationParser: Modular.routeInformationParser,
       routerDelegate: Modular.routerDelegate,
+      builder: Asuka.builder,
     );
   }
 }

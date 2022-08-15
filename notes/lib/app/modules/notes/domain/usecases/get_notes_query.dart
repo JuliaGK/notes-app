@@ -5,24 +5,21 @@ import '../errors/errors.dart';
 import '../repositories/notes_repository.dart';
 
 abstract class GetNotesQuery {
-  Future<Either<FailureGettingNotesQuery, Query>> call();
+  Future<Either<FailureGettingNotesQuery, Query>> getNotesQuery();
 }
 
 class GetNotesQueryImpl implements GetNotesQuery {
-
   final NotesRepository repository;
 
   GetNotesQueryImpl(this.repository);
 
   @override
-  Future<Either<FailureGettingNotesQuery, Query>> call() async {
-    try {
-      Query notesQuery;
-      notesQuery = repository.getNotesQuery() as Query;
-      return Right(notesQuery);
-    } catch (e) {
-      return Left(FailureGettingNotesQuery('Failure getting notes query'));
+  Future<Either<FailureGettingNotesQuery, Query>> getNotesQuery() async {
+    var result = await repository.getNotesQuery();
+    if (result.isLeft()) {
+      return result.leftMap((l) => l);
+    } else {
+      return result.map((r) => r);
     }
   }
-
 }

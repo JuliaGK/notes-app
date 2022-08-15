@@ -9,21 +9,21 @@ abstract class CreateNewNote {
 }
 
 class CreateNewNoteImpl implements CreateNewNote {
-
   final NotesRepository repository;
 
   CreateNewNoteImpl(this.repository);
 
   @override
   Future<Either<FailureCreatingNewNote, bool>> call(Note newNote) async {
-
-    if(newNote.color == ''){
+    if (newNote.color == '') {
       return Left(FailureCreatingNewNote('Empty color field'));
     } else {
-     // repository.createNewNote(newNote);
-      return const Right(true);
+      var result = await repository.createNewNote(newNote);
+      if (result.isLeft()) {
+        return result.leftMap((l) => l);
+      } else {
+        return result.map((r) => r);
+      }
     }
-
   }
-
 }

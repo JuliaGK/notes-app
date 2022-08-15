@@ -9,20 +9,22 @@ abstract class EditExistingNote {
 }
 
 class EditExistingNoteImpl implements EditExistingNote {
-
   final NotesRepository repository;
 
   EditExistingNoteImpl(this.repository);
 
-
   @override
-  Future<Either<FailureEditingExistingNote, bool>> call(Note existingNote) async {
-    try {
-      repository.updateExistingNote(existingNote);
-      return const Right(true);
-    } catch (e) {
+  Future<Either<FailureEditingExistingNote, bool>> call(
+      Note existingNote) async {
+    if (existingNote.id == '') {
       return Left(FailureEditingExistingNote('Failure editing existing note'));
+    } else {
+      var result = await repository.updateExistingNote(existingNote);
+      if(result.isLeft()){
+        return result.leftMap((l) => l);
+      } else {
+        return result.map((r) => r);
+      }
     }
   }
-
 }

@@ -17,8 +17,10 @@ class NotesRepositoryImpl implements NotesRepository {
   @override
   Future<Either<FailureCreatingNewNote, bool>> createNewNote(Note newNote) async {
     try {
-      notesDatasourse.createNote(newNote.toMap());
-      return const Right(true);
+      Map noteMap = newNote.toMap();
+      noteMap['datetimeCreated'] = DateTime.now();
+      var result = await notesDatasourse.createNote(newNote.toMap());
+      return Right(result);
     } catch (e) {
       return Left(FailureCreatingNewNote('Failure creating new note in implemention'));
     }
@@ -27,8 +29,8 @@ class NotesRepositoryImpl implements NotesRepository {
   @override
   Future<Either<FailureDeletingNote, bool>> deleteNote(String id) async {
     try {
-      notesDatasourse.deleteNote(id);
-      return const Right(true);
+      var result = await notesDatasourse.deleteNote(id);
+      return Right(result);
     } catch (e) {
       return Left(FailureDeletingNote('Failure deleting note in implemention'));
     }
@@ -37,7 +39,8 @@ class NotesRepositoryImpl implements NotesRepository {
   @override
   Future<Either<FailureGettingNote, Note>> getNote(String id) async {
     try {
-      Note note = notesDatasourse.getNote(id) as Note;
+      var mapNote = await notesDatasourse.getNote(id);
+      Note note = Note(id: id, title: mapNote["title"], content: mapNote["text"], color: mapNote["color"], datetimeCreated: mapNote["datetime_created"]);
       return Right(note);
     } catch (e) {
       return Left(FailureGettingNote('Failure getting note in implemention'));
@@ -47,8 +50,8 @@ class NotesRepositoryImpl implements NotesRepository {
   @override
   Future<Either<FailureGettingNotesQuery, Query>> getNotesQuery() async {
     try {
-      Query query = notesDatasourse.getNotesQuery() as Query;
-      return Right(query);
+      var result = await notesDatasourse.getNotesQuery();
+      return Right(result);
     } catch (e) {
       return Left(FailureGettingNotesQuery('Failure getting notes query in implemention'));
     }
@@ -57,8 +60,8 @@ class NotesRepositoryImpl implements NotesRepository {
   @override
   Future<Either<FailureEditingExistingNote, bool>> updateExistingNote(Note existingNote) async {
     try {
-      notesDatasourse.createNote(existingNote.toMap());
-      return const Right(true);
+      var result = await notesDatasourse.updateNote(existingNote.toMap());
+      return Right(result);
     } catch (e) {
       return Left(FailureEditingExistingNote('Failure editing existing note in implemention'));
     }

@@ -1,9 +1,9 @@
 class Note {
-  final String id;
-  final String title;
-  final String content;
-  final String color;
-  final String datetimeCreated;
+  String id;
+  String title;
+  String content;
+  String color;
+  String datetimeCreated;
 
   Note(
       {this.id = '',
