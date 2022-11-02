@@ -4,8 +4,8 @@ Notes App
 <p align="center">
 🖋️ A mobile app developed in Flutter for note taking.
 </p>
-
-![](https://github.com/JuliaGK/notes-app/blob/main/notes-app-gif.gif)
+  
+<img src="https://github.com/JuliaGK/notes-app/blob/main/notes-app-gif.gif" width="400" height="711" align="center"/>
 
 ## Features
 This app was developed using
